@@ -936,7 +936,12 @@ class App {
             }
             if (k === 'Enter') {
                 if (this.menuScreen.classList.contains('active')) { e.preventDefault(); this.sound.ensure(); this.startGame(); }
-                else if (this.overlays.over.classList.contains('show')) { e.preventDefault(); this.startGame(); }
+                else if (this.overlays.over.classList.contains('show')) {
+                    e.preventDefault();
+                    const initialsOpen = $('initialsSection') && $('initialsSection').style.display !== 'none';
+                    if (initialsOpen) { $('saveScoreBtn')?.click(); }
+                    else this.startGame();
+                }
                 return;
             }
             if (k === 'Escape') {
@@ -1087,7 +1092,7 @@ class App {
         $('overScore').textContent = g.score; $('sgLen').textContent = g.segments.length;
         $('sgLevel').textContent = g.level; $('sgFood').textContent = g.foods;
         $('sgTime').textContent = Math.round(g.playTime / 1000) + 's';
-        $('overBestLine').textContent = 'Best: ' + this.high + '  ·  Games: ' + this.games;
+        $('overBestLine').textContent = 'Best: ' + Math.max(this.high, g.score) + '  ·  Games: ' + this.games;
         $('recordBadge').classList.toggle('show', isRecord);
         
         this.renderLeaderboard();
